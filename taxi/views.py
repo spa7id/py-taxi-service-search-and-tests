@@ -1,3 +1,5 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -6,7 +8,8 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Driver, Car, Manufacturer
-from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm
+from .forms import DriverCreationForm, DriverLicenseUpdateForm, CarForm, \
+    DriversSearchForm
 
 
 @login_required
@@ -85,6 +88,10 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
     paginate_by = 5
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(DriverListView, self).get_context_data(**kwargs)
+        context["search_form"] = DriversSearchForm()
+        return context
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
