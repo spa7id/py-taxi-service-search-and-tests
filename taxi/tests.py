@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from taxi.models import Manufacturer, Car, Driver
+from taxi.models import Manufacturer, Car
 
 
 class IndexViewTest(TestCase):
@@ -63,12 +63,14 @@ class DriverListViewTest(TestCase):
         )
         self.client.force_login(self.user)
 
-        Driver.objects.create(
+        user_model = get_user_model()
+
+        user_model.objects.create_user(
             username="driver1",
             password="password123",
             license_number="ABC12345"
         )
-        Driver.objects.create(
+        user_model.objects.create_user(
             username="driver2",
             password="password123",
             license_number="DEF67890"
